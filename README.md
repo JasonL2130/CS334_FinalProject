@@ -1,1 +1,3 @@
-# CS334_CreditCard_Fraud
+# CS334 Final Project
+
+Credit Card Fraud Detection - Relevance of Personal Cardholder Information
