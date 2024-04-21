@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-
+from glove import Corpus, Glove
+from gensim.models import Word2Vec
 
 # Drop Features 
 def drop_features(df, cols):
@@ -114,5 +115,11 @@ def remove_prefix(df, col_name):
 
 ############################ Vectorizing Categorical Vaiables ############################
 
+def apply_glove(df, value_list):
+    corpus_model = Corpus()
+    corpus_model.fit(value_list)
 
+    glove_model = Glove(learning_rate = 0.05)
+    glove_model.fit(corpus_model.matrix, epochs=30, verbose=True)
 
+    return None
