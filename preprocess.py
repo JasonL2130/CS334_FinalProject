@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
 from gensim.models import Word2Vec
+from imblearn.over_sampling import SMOTE
 
 # Drop Features 
 def drop_features(df, cols):
@@ -15,10 +16,10 @@ def one_hot_encode(df, cols):
     return encoded_df
 
 # Label Encode Categorical Features
-def label_encode(df, cols, options):
+def label_encode(df, cols):
     label_encoder = LabelEncoder()
-    label_encoder.fit(options)
     for feature in cols:
+        label_encoder.fit(df[feature])
         df[feature] = label_encoder.transform(df[feature])
 
     return df
@@ -66,7 +67,7 @@ def min_max_scale(train_df, test_df, cols):
 # Train-Test Split of Data
 def data_split(df):
     train, test = train_test_split(df, test_size=0.2, random_state=42)
-    return train, test
+    return train.reset_index(drop=True), test.reset_index(drop=True)
 
 # Pearson Correlation Matrix
 def pearson_matrix(df):
@@ -126,3 +127,10 @@ def remove_prefix(df, col_name):
 def apply_word2vec(df, value_list):
 
     return None
+
+############################ DEALING W/ CLASS IMBALANCE ############################
+
+def smote(xFeat, y):
+    smote_model = SMOTE(sampling_strategy='auto')
+    x_train_smote, y_train_smote = smote_model.fit_resample(xFeat, y)
+    return x_train_smote, y_train_smote
