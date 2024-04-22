@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
-from glove import Corpus, Glove
 from gensim.models import Word2Vec
 
 # Drop Features 
@@ -14,6 +13,15 @@ def drop_features(df, cols):
 def one_hot_encode(df, cols):
     encoded_df = pd.get_dummies(df, columns=cols, dtype=int)
     return encoded_df
+
+# Label Encode Categorical Features
+def label_encode(df, cols, options):
+    label_encoder = LabelEncoder()
+    label_encoder.fit(options)
+    for feature in cols:
+        df[feature] = label_encoder.transform(df[feature])
+
+    return df
 
 # Moving Label Features to End of DF
 def label_end(df, cols):
@@ -115,11 +123,6 @@ def remove_prefix(df, col_name):
 
 ############################ Vectorizing Categorical Vaiables ############################
 
-def apply_glove(df, value_list):
-    corpus_model = Corpus()
-    corpus_model.fit(value_list)
-
-    glove_model = Glove(learning_rate = 0.05)
-    glove_model.fit(corpus_model.matrix, epochs=30, verbose=True)
+def apply_word2vec(df, value_list):
 
     return None
