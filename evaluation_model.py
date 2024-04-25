@@ -6,7 +6,7 @@ def eval_model(estimator, X_test, y_test, yHat, elapsed_time):
     auc = roc_auc_score(y_test, yHat_prob)
     auprc = average_precision_score(y_test, yHat_prob)
     f1 = f1_score(y_test, yHat)
-    fpr, tpr, thresholds = roc_curve(y_test, yHat)
+    fpr, tpr, thresholds = roc_curve(y_test, yHat_prob)
     time = elapsed_time
 
     resultDict = { 'AUC': auc, 'AUPRC': auprc, 'F1': f1, 'Accuracy': accuracy, 'Time': time}
