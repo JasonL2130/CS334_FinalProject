@@ -24,6 +24,19 @@ def label_encode(df, cols):
 
     return df
 
+# Convert Names to Origin (then to # Using Label Encoder)
+def name_converter(model, df, col):
+    names = list(df[col])
+    name_output = model.predict(names)
+    format_data = [(origin[0], prob) for origin, prob in zip(name_output[0], name_output[1])]
+    name_val_df = pd.DataFrame(format_data, columns = [col, 'Prob'])
+    name_val_df.drop(columns=['Prob'], inplace=True)
+    
+    encoded = label_encode(name_val_df, [col])
+    df[col] = encoded
+
+    return df
+
 # Moving Label Features to End of DF
 def label_end(df, cols):
     for feature in cols:
